@@ -10,17 +10,7 @@ package demo;
  */
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import static java.awt.print.Printable.NO_SUCH_PAGE;
-import static java.awt.print.Printable.PAGE_EXISTS;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -34,14 +24,16 @@ public class Jnotepad extends JFrame {
     private JMenuItem itemUndo, itemCut, itemCopy, itemPaste, itemDelete, itemSearch, itemFind, itemReplace, itemGoto, itemSelect, itemTime;
     private JMenuItem itemFont, itemZoomOn, itemZoomIn, itemSend, itemAbout;
     private JCheckBoxMenuItem itemWord, itemBar;
-    private int size = 14;
-
+    private int size = 20;
+    private JToolBar toolbar;
+    private JButton btNew,btOpen,btSave;
     private JTextArea txtEditor;
     private File currentFile = null; // Biến lưu tên file hiện tại
 
     public Jnotepad(String title) {
         super(title);
         createMenu();
+        createJToolBar();
         txtEditor = new JTextArea();
         JScrollPane scrollEditor = new JScrollPane(txtEditor);
         add(scrollEditor);
@@ -202,7 +194,20 @@ public class Jnotepad extends JFrame {
                 ex.printStackTrace();
             }
         });
-
+        btSave.addActionListener(e -> {
+            try {
+                saveFile(); // Gọi hàm lưu file
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
+        btOpen.addActionListener(e -> {
+            try {
+                openFile(); // Gọi hàm mở file
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
         
     }
 
@@ -243,6 +248,26 @@ public class Jnotepad extends JFrame {
             Jnotepad jnotepad = new Jnotepad("Jnotepad");
             jnotepad.setVisible(true);
         });
+    }
+
+    private void createJToolBar() {
+       // Tạo thành thanh công cụ
+    toolbar = new JToolBar();
+
+    btNew = new JButton();
+    btOpen = new JButton();
+    btSave = new JButton();
+
+    toolbar.add(btNew);
+    toolbar.add(btOpen);
+    toolbar.add(btSave);
+    //chèn iocn
+    btNew.setIcon(new ImageIcon(this.getClass().getResource("/images/new.png")));
+    btOpen.setIcon(new ImageIcon(this.getClass().getResource("/images/open.png")));
+    btSave.setIcon(new ImageIcon(this.getClass().getResource("/images/save.png")));
+
+    // Sửa lỗi ở đây: thay vì add. thì nên là add
+    add(toolbar, BorderLayout.NORTH);
     }
 }
 
